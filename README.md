@@ -28,15 +28,15 @@ This workshop **complements** the [official NAKALA documentation](https://docume
 | **Official Tutorials** | Learning API fundamentals, custom integrations | Manual JSON construction in your code |
 | **This Workshop** | Batch operations, non-developers, researchers managing many datasets | CSV → Auto-converted to JSON |
 
-### Key Innovation: The `nakala` Python Package
+### Pedagogical Approach: CSV-to-JSON Abstraction
 
-The workshop's `nakala` package provides a **CSV-to-JSON conversion engine** that:
-- **Parses multilingual fields** automatically: `en:Title\|fr:Titre` → valid JSON-LD
+To facilitate learning and batch operations, this workshop provides a `nakala` Python package that:
+- **Abstracts JSON-LD complexity** for beginners: `en:Title\|fr:Titre` → valid JSON-LD
 - **Handles structured data**: `Surname, Given (ORCID)` → NAKALA creator format
 - **Pre-validates** your data before API submission
-- **Reusable**: Import it in your own scripts for production workflows
+- **Provides reusable utilities** for batch workflows
 
-This abstraction lets you focus on your **data content** rather than API syntax—ideal for researchers managing multiple datasets.
+This educational scaffolding complements the official API documentation with a streamlined teaching interface, allowing learners to focus on **workflow concepts** before diving into JSON-LD details.
 
 ---
 
@@ -311,6 +311,17 @@ After completing this workshop, you'll receive:
 MIT License - See [LICENSE](LICENSE) file
 
 **Copyright**: LIAO Shueh-Ying
+
+---
+
+## 🙏 Acknowledgments
+
+This workshop is built on the [NAKALA platform](https://www.nakala.fr/), developed and maintained by the NAKALA team at Huma-Num. We are grateful for their comprehensive API documentation and test environment that make this educational resource possible.
+
+**Official Resources**:
+- [NAKALA Platform](https://www.nakala.fr/)
+- [Official Documentation](https://documentation.huma-num.fr/nakala/)
+- [API Reference](https://apitest.nakala.fr/doc)
 
 ---
 
