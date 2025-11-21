@@ -61,7 +61,7 @@ graph TD
 
 This workshop is fully compliant with Huma-Num's official standards.
 
--   **Metadata**: Aligns with the [Official Metadata Guide](https://documentation.huma-num.fr/nakala/#decrire-des-donnees).
+-   **Metadata**: Aligns with the [Official Metadata Guide](https://documentation.huma-num.fr/nakala-guide-de-description/).
 -   **API**: Uses official [NAKALA API](https://api.nakala.fr/doc) endpoints.
 -   **Single Source of Truth**: For definitive metadata standards, always refer to the [Official NAKALA Documentation](https://documentation.huma-num.fr/nakala/).
 
