@@ -1,5 +1,9 @@
 # CSV Format Guide
 
+**Strict Specification** for the `nakala` Python package's CSV-to-JSON conversion engine.
+
+The `csv_converter.py` engine strictly parses these formats to generate valid NAKALA JSON-LD. Do not deviate from these patterns, or the automatic conversion will fail.
+
 Quick reference for formatting CSV files for NAKALA batch operations.
 
 ---

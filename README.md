@@ -19,6 +19,27 @@ Execute a complete NAKALA workflow step-by-step:
 
 ---
 
+## ✨ Why This Workshop?
+
+This workshop **complements** the [official NAKALA documentation](https://documentation.huma-num.fr/nakala/) by providing a streamlined approach for batch operations.
+
+| Approach | Best For | How It Works |
+|----------|----------|--------------|
+| **Official Tutorials** | Learning API fundamentals, custom integrations | Manual JSON construction in your code |
+| **This Workshop** | Batch operations, non-developers, researchers managing many datasets | CSV → Auto-converted to JSON |
+
+### Key Innovation: The `nakala` Python Package
+
+The workshop's `nakala` package provides a **CSV-to-JSON conversion engine** that:
+- **Parses multilingual fields** automatically: `en:Title\|fr:Titre` → valid JSON-LD
+- **Handles structured data**: `Surname, Given (ORCID)` → NAKALA creator format
+- **Pre-validates** your data before API submission
+- **Reusable**: Import it in your own scripts for production workflows
+
+This abstraction lets you focus on your **data content** rather than API syntax—ideal for researchers managing multiple datasets.
+
+---
+
 ## 🔄 Workflow
 
 This workshop follows the universal NAKALA API batch operations workflow:
