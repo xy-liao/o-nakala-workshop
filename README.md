@@ -31,7 +31,7 @@ This workshop **complements** the [official NAKALA documentation](https://docume
 ### Pedagogical Approach: CSV-to-JSON Abstraction
 
 To facilitate learning and batch operations, this workshop provides a `nakala` Python package that:
-- **Abstracts JSON-LD complexity** for beginners: `en:Title\|fr:Titre` → valid JSON-LD
+- **Abstracts JSON-LD complexity** for beginners: `en:Title|fr:Titre` → valid JSON-LD
 - **Handles structured data**: `Surname, Given (ORCID)` → NAKALA creator format
 - **Pre-validates** your data before API submission
 - **Provides reusable utilities** for batch workflows
