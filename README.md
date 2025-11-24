@@ -117,7 +117,8 @@ python3 -m venv venv
 # 3. Activate virtual environment
 source venv/bin/activate     # On macOS/Linux
 # OR
-venv\Scripts\activate        # On Windows
+.\venv\Scripts\activate      # On Windows (PowerShell)
+venv\Scripts\activate.bat    # On Windows (Command Prompt)
 
 # 4. Install all dependencies (including Jupyter)
 pip install jupyter requests python-dotenv ipywidgets pandas
