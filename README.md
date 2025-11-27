@@ -103,33 +103,100 @@ This kit includes a custom Python package (`nakala/`) that abstracts complex API
 - Jupyter Notebook
 - Internet connection (for NAKALA test API)
 
-### Installation
+### Step 0: Verify Python Installation
 
-**Step-by-step setup** (works for everyone):
+Before starting, verify that Python is installed on your machine:
 
 ```bash
-# 1. Navigate to workshop directory
-cd o-nakala-workshop
+python --version
+```
 
-# 2. Create virtual environment
+If this doesn't work, try:
+
+```bash
+python3 --version
+```
+
+**If Python is not installed:**
+- **Windows**: Download from https://www.python.org/downloads/ (⚠️ Check "Add Python to PATH" during installation)
+- **Mac/Linux**: Python is usually pre-installed. If needed, install from https://www.python.org/downloads/
+
+**📝 Important**: Remember which command works (`python` or `python3`), as you'll need to use it in the following steps.
+
+### Step 1: Download the Workshop
+
+**Option A - Download ZIP (recommended for beginners)**:
+1. Go to https://github.com/xy-liao/o-nakala-workshop
+2. Click the green **"Code"** button in the top right
+3. Choose **"Download ZIP"**
+4. Extract the downloaded file
+
+**Option B - Git clone**:
+```bash
+git clone https://github.com/xy-liao/o-nakala-workshop.git
+```
+
+### Step 2: Installation
+
+**Navigate to the workshop directory:**
+
+If you downloaded the ZIP:
+```bash
+cd path/to/o-nakala-workshop-main
+```
+
+If you cloned with Git:
+```bash
+cd path/to/o-nakala-workshop
+```
+
+**Create and activate virtual environment** (recommended):
+
+```bash
+# Create virtual environment (use python or python3 based on Step 0)
 python3 -m venv venv
 
-# 3. Activate virtual environment
+# Activate virtual environment
 source venv/bin/activate     # On macOS/Linux
 # OR
 .\venv\Scripts\activate      # On Windows (PowerShell)
 venv\Scripts\activate.bat    # On Windows (Command Prompt)
+```
 
-# 4. Install all dependencies (including Jupyter)
-pip install jupyter requests python-dotenv ipywidgets pandas
+**Install dependencies:**
 
-# 5. Start Jupyter
+```bash
+# Use python or python3 based on what worked in Step 0
+python -m pip install -r requirements.txt
+```
+
+**Start Jupyter:**
+
+```bash
 jupyter notebook
 ```
 
 **When Jupyter asks "Select Kernel":**
 - Choose `Python 3` or the first Python option
 - Click "Select"
+
+### Step 3: Verify API Connection
+
+Run this verification command to confirm your NAKALA Test API connection works.
+
+**Using `python`:**
+```bash
+python -c "import requests; from nakala import API_URL, API_KEY; print(f'Connexion à {API_URL}...'); r = requests.get(f'{API_URL}/users/me', headers={'X-API-KEY': API_KEY}); print('✅ PRÊT !' if r.status_code == 200 else f'❌ ERREUR : {r.status_code}')"
+```
+
+**Using `python3`:**
+```bash
+python3 -c "import requests; from nakala import API_URL, API_KEY; print(f'Connexion à {API_URL}...'); r = requests.get(f'{API_URL}/users/me', headers={'X-API-KEY': API_KEY}); print('✅ PRÊT !' if r.status_code == 200 else f'❌ ERREUR : {r.status_code}')"
+```
+
+**Expected results:**
+- **✅ PRÊT !** → Everything works, you're ready!
+- **❌ ERREUR : [code]** → There's an issue, please contact us before the workshop
 
 **After the workshop:**
 ```bash
@@ -330,12 +397,12 @@ This workshop is built on the [NAKALA platform](https://www.nakala.fr/), develop
 
 **Jupyter won't start?**
 ```bash
-pip install --upgrade jupyter
+python -m pip install --upgrade jupyter
 ```
 
 **Import errors?**
 ```bash
-pip install -r requirements.txt
+python -m pip install -r requirements.txt
 ```
 
 **API connection issues?**
