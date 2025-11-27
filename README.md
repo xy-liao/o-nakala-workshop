@@ -167,6 +167,7 @@ venv\Scripts\activate.bat    # On Windows (Command Prompt)
 
 ```bash
 # Use python or python3 based on what worked in Step 0
+python -m pip install --upgrade pip
 python -m pip install -r requirements.txt
 ```
 
