@@ -274,11 +274,21 @@ from nakala.demo_helpers import (
 
 ### Script fails with "Module not found"
 
-**Solution**: Ensure you're running from the workshop root directory:
+**Solution 1**: Ensure you're running from the workshop root directory:
 ```bash
 cd /path/to/o-nakala-workshop
 python demonstrations/script_name.py
 ```
+
+**Solution 2** (Alternative): Install the package in editable mode:
+```bash
+cd /path/to/o-nakala-workshop
+pip install -e .
+# Now you can run scripts from anywhere
+python demonstrations/script_name.py
+```
+
+**Note**: As of the latest version, demonstration scripts include automatic path detection and can be run directly without installation.
 
 ### API connection errors
 

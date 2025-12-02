@@ -4,6 +4,49 @@ Common issues and solutions for NAKALA batch operations.
 
 ---
 
+## Installation Methods
+
+Understanding your installation options can prevent many common issues.
+
+### Method 1: requirements.txt (Default for Workshop Participants)
+
+```bash
+pip install -r requirements.txt
+```
+
+**Pros**:
+- ✅ Simple and familiar
+- ✅ No package installation needed
+- ✅ Clear dependency management
+
+**Cons**:
+- ❌ Must run scripts from specific locations
+- ❌ Need manual path management for imports
+
+**Best for**: Workshop participants following structured notebooks.
+
+---
+
+### Method 2: Editable Installation (Recommended for Developers)
+
+```bash
+pip install -e .
+```
+
+**Pros**:
+- ✅ Run scripts from anywhere
+- ✅ Package available system-wide (within venv)
+- ✅ Changes to code reflect immediately
+- ✅ Import `nakala` package in your own projects
+
+**Cons**:
+- ❌ One extra concept to learn
+- ❌ Slightly more complex setup
+
+**Best for**: Developers extending this workshop or building custom tools.
+
+---
+
 ## CSV Format Issues
 
 ### Issue: "Invalid CSV format" error
@@ -234,13 +277,28 @@ print(f"Status: {status}")  # Only "pending" can be deleted
 
 **Symptoms**: `from nakala.config import ...` fails
 
-**Solution**: Ensure `sys.path` includes parent directory
+**Solution 1 - Use editable package installation** (Recommended):
+```bash
+cd /path/to/o-nakala-workshop
+pip install -e .
+```
 
+This installs the `nakala` package in editable mode, making it available everywhere.
+
+**Solution 2 - Run from correct directory**:
+```bash
+cd /path/to/o-nakala-workshop
+python demonstrations/script_name.py
+```
+
+**Solution 3 - Manual sys.path** (Already in notebooks):
 ```python
 import sys
 from pathlib import Path
 sys.path.insert(0, str(Path.cwd().parent))
 ```
+
+**Note**: Recent demonstration scripts include automatic path detection (Solution 3 is built-in), so you can run them directly without installation.
 
 ---
 

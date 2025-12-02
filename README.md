@@ -165,11 +165,20 @@ venv\Scripts\activate.bat    # On Windows (Command Prompt)
 
 **Install dependencies:**
 
+**Option A - Direct installation** (recommended for workshop participants):
 ```bash
 # Use python or python3 based on what worked in Step 0
 python -m pip install --upgrade pip
 python -m pip install -r requirements.txt
 ```
+
+**Option B - Editable package installation** (recommended for developers):
+```bash
+python -m pip install --upgrade pip
+pip install -e .
+```
+
+This installs the `nakala` package in editable mode, allowing you to run scripts from any directory and import the package in your own code.
 
 **Start Jupyter:**
 
@@ -187,12 +196,12 @@ Run this verification command to confirm your NAKALA Test API connection works.
 
 **Using `python`:**
 ```bash
-python -c "import requests; from nakala import API_URL, API_KEY; print(f'Connexion à {API_URL}...'); r = requests.get(f'{API_URL}/users/me', headers={'X-API-KEY': API_KEY}); print('✅ PRÊT !' if r.status_code == 200 else f'❌ ERREUR : {r.status_code}')"
+python -c 'import requests; from nakala import API_URL, API_KEY; print(f"Connexion à {API_URL}..."); r = requests.get(f"{API_URL}/users/me", headers={"X-API-KEY": API_KEY}); print("✅ PRÊT !" if r.status_code == 200 else f"❌ ERREUR : {r.status_code}")'
 ```
 
 **Using `python3`:**
 ```bash
-python3 -c "import requests; from nakala import API_URL, API_KEY; print(f'Connexion à {API_URL}...'); r = requests.get(f'{API_URL}/users/me', headers={'X-API-KEY': API_KEY}); print('✅ PRÊT !' if r.status_code == 200 else f'❌ ERREUR : {r.status_code}')"
+python3 -c 'import requests; from nakala import API_URL, API_KEY; print(f"Connexion à {API_URL}..."); r = requests.get(f"{API_URL}/users/me", headers={"X-API-KEY": API_KEY}); print("✅ PRÊT !" if r.status_code == 200 else f"❌ ERREUR : {r.status_code}")'
 ```
 
 **Expected results:**
