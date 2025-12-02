@@ -72,6 +72,12 @@ import json
 from pathlib import Path
 from typing import Dict, Any, List, Optional
 
+# Add parent directory to path to allow importing nakala package
+current_dir = Path(__file__).parent
+parent_dir = current_dir.parent
+if str(parent_dir) not in sys.path:
+    sys.path.insert(0, str(parent_dir))
+
 # Import from nakala package
 from nakala import (
     API_URL,
