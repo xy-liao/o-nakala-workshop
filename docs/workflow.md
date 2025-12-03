@@ -84,7 +84,7 @@ This document describes the universal workflow for batch operations with the NAK
 | Upload file | POST | `/datas/uploads` | Upload file to temporary storage |
 | Create dataset | POST | `/datas` | Create new dataset with metadata |
 | Create collection | POST | `/collections` | Create new collection |
-| Add to collection | POST | `/collections/{id}/datas/{dataId}` | Link dataset to collection |
+| Add to collection | POST | `/collections/{id}/datas` | Link dataset(s) to collection (body: array of IDs) |
 
 ### Stage 2: Modify Operations
 
