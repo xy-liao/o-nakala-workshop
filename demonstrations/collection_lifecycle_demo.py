@@ -523,8 +523,9 @@ This demonstration shows the complete HTTP method lifecycle for NAKALA collectio
    ✓ Preserves existing metadata
    ✓ Best for adding fields
 
-3. POST /collections/{id}/datas/{dataId} - Affectation
-   ✓ Links dataset to collection
+3. POST /collections/{id}/datas - Affectation
+   ✓ Links dataset(s) to collection
+   ✓ Body: ["10.34847/nkl.abc123"] (array of dataset IDs)
    ✓ Dataset can be in multiple collections
 
 4. PUT /collections/{id}/status/{status} - Update status
@@ -535,8 +536,9 @@ This demonstration shows the complete HTTP method lifecycle for NAKALA collectio
    Note: PATCH /collections/{id} is NOT supported (returns 405)
    (Use PUT /collections/{id}/status for status changes)
 
-5. DELETE /collections/{id}/datas/{dataId} - Désaffectation
-   ✓ Removes dataset from collection
+5. DELETE /collections/{id}/datas - Désaffectation
+   ✓ Removes dataset(s) from collection
+   ✓ Body: ["10.34847/nkl.abc123"] (array of dataset IDs)
    ✗ Does NOT delete dataset from server
    ✓ Dataset still exists independently
 
@@ -569,7 +571,7 @@ This demonstration shows the complete HTTP method lifecycle for NAKALA collectio
 ║             DÉSAFFECTATION vs DELETION (Critical Difference)               ║
 ╠═══════════════════════════════════════════════════════════════════════════╣
 ║                                                                            ║
-║  DÉSAFFECTATION (DELETE /collections/{id}/datas/{dataId})                 ║
+║  DÉSAFFECTATION (DELETE /collections/{id}/datas)                          ║
 ║  --------------------------------------------------------                  ║
 ║  • Removes dataset FROM collection                                         ║
 ║  • Dataset STILL EXISTS on server                                          ║
