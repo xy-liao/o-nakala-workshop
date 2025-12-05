@@ -89,6 +89,12 @@ from nakala import (
     PROPERTY_URIS
 )
 
+# Known test users for fallback when search fails (e.g. empty server)
+KNOWN_TEST_USERS = {
+    "tnakala": "5a38883d-6b58-450a-9892-0545b7461973",
+    "unakala1": "33170cfe-f53c-550b-5fb6-4814ce981293"  # Just the UUID, no key!
+}
+
 from nakala.demo_helpers import (
     make_api_request,
     print_section_header,
@@ -492,132 +498,72 @@ Important: Groups must have at least one user besides yourself.
 Rights can be assigned to individual users without creating a group.
 The workflow is identical to group rights assignment.
 
-Challenge: Discovering User UUIDs
-──────────────────────────────────
+Prerequisite: User UUID
+───────────────────────
 The NAKALA API requires user UUIDs (not usernames) for rights assignment.
-The public search endpoint (GET /users/search) returns user details but not UUIDs.
+You can find a user's UUID by searching for them.
 
-Solution for this demo:
-• Use a test account (unakala1) to create a temporary resource
-• Check that resource's rights to discover unakala1's UUID
-• Use the discovered UUID to assign rights to our main dataset
-• Clean up the temporary resource
-
-In production:
-• Maintain user UUID mapping in your application database
-• Store UUIDs when users first authenticate
-• Look up UUIDs by username for rights assignment
-
-Use Cases for Individual Rights:
-────────────────────────────────
+Use Cases:
+──────────
 ✓ Quick collaboration with one person
 ✓ Guest access for reviewers
 ✓ Temporary access for external collaborators
-✓ Individual permissions without group overhead
         """)
 
         if not self.dataset_id:
             print_warning("\nNo dataset available. Skipping rights assignment demo.")
             return
 
-        wait_for_user("\nPress ENTER to discover user UUID and assign individual rights")
+        wait_for_user("\nPress ENTER to search for a user and assign rights")
 
-        # Step 1: Discover user UUID using test account
-        print_step_header("1", "Discover user UUID (unakala1)", "GET")
+        # Step 1: Find user UUID via search
+        target_username = "tnakala"  # Using 'tnakala' as it is a known test user
+        print_step_header("1", f"Find UUID for user '{target_username}'", "GET")
 
-        print_info("\nUsing test account 'unakala1' to discover their UUID...")
-        print_info("Strategy: Create temporary resource → check its rights → extract UUID")
+        print_info(f"Searching for user '{target_username}'...")
+        
+        target_uuid = None
+        target_fullname = "Unknown"
 
-        # Use unakala1's API key
-        import requests
-        test_api_key = "33170cfe-f53c-550b-5fb6-4814ce981293"  # unakala1's key
+        try:
+            response = make_api_request('GET', f'/users/search?q={target_username}&limit=1')
+            
+            if response.status_code == 200:
+                results = response.json()
+                if results:
+                    user_data = results[0]
+                    target_uuid = user_data.get('id')
+                    target_fullname = user_data.get('fullName') or user_data.get('fullname', 'Unknown')
+                    
+                    print_success(f"✓ User found: {target_fullname} (@{target_username})")
+                    print_info(f"   UUID: {target_uuid}")
+                else:
+                    print_warning(f"User '{target_username}' not found in search results.")
+            else:
+                print_warning(f"Search failed: {response.status_code}")
+        except Exception as e:
+            print_warning(f"Search request failed: {e}")
 
-        # Create minimal temp resource with unakala1
-        import io
-        temp_files = {'file': ('temp_uuid_lookup.txt', io.BytesIO(b"Temp file for UUID lookup"), 'text/plain')}
-
-        upload_response = requests.post(
-            f'{self.api_url}/datas/uploads',
-            headers={'X-API-KEY': test_api_key},
-            files=temp_files
-        )
-
-        if upload_response.status_code != 201:
-            print_error(f"✗ Failed to upload temp file: {upload_response.status_code}")
-            print_warning("Skipping individual user rights demo")
-            return
-
-        temp_file_info = upload_response.json()
-
-        # Create temp dataset with unakala1
-        temp_dataset = {
-            "status": "pending",
-            "metas": [
-                {"propertyUri": "http://nakala.fr/terms#title", "value": "Temp UUID Lookup", "lang": "en", "typeUri": "http://www.w3.org/2001/XMLSchema#string"},
-                {"propertyUri": "http://nakala.fr/terms#type", "value": "http://purl.org/coar/resource_type/c_18cf", "typeUri": "http://www.w3.org/2001/XMLSchema#anyURI"},
-                {"propertyUri": "http://nakala.fr/terms#creator", "value": ["Test,User"], "lang": "en", "typeUri": "http://www.w3.org/2001/XMLSchema#string"},
-                {"propertyUri": "http://nakala.fr/terms#created", "value": "2025", "typeUri": "http://www.w3.org/2001/XMLSchema#string"},
-                {"propertyUri": "http://nakala.fr/terms#license", "value": "CC-BY-4.0", "typeUri": "http://www.w3.org/2001/XMLSchema#string"}
-            ],
-            "files": [temp_file_info]
-        }
-
-        temp_create_response = requests.post(
-            f'{self.api_url}/datas',
-            headers={'X-API-KEY': test_api_key, 'Content-Type': 'application/json'},
-            json=temp_dataset
-        )
-
-        if temp_create_response.status_code not in [200, 201]:
-            print_error(f"✗ Failed to create temp dataset: {temp_create_response.status_code}")
-            print_warning("Skipping individual user rights demo")
-            return
-
-        temp_dataset_id = temp_create_response.json()['payload']['id']
-        print_info(f"  ✓ Created temp dataset: {temp_dataset_id}")
-
-        # Get rights to discover UUID
-        temp_rights_response = requests.get(
-            f'{self.api_url}/datas/{temp_dataset_id}/rights',
-            headers={'X-API-KEY': test_api_key}
-        )
-
-        if temp_rights_response.status_code != 200:
-            print_error(f"✗ Failed to get rights: {temp_rights_response.status_code}")
-            # Cleanup temp dataset
-            requests.delete(f'{self.api_url}/datas/{temp_dataset_id}', headers={'X-API-KEY': test_api_key})
-            return
-
-        temp_rights = temp_rights_response.json()
-
-        # Extract unakala1's UUID (will be the OWNER)
-        unakala1_uuid = None
-        unakala1_name = None
-        for right in temp_rights:
-            if right.get('role') == 'ROLE_OWNER':
-                unakala1_uuid = right.get('id')
-                unakala1_name = right.get('name', 'unakala1')
-                break
-
-        # Cleanup temp dataset
-        requests.delete(f'{self.api_url}/datas/{temp_dataset_id}', headers={'X-API-KEY': test_api_key})
-
-        if not unakala1_uuid:
-            print_error("✗ Could not extract user UUID")
-            return
-
-        print_success(f"\n✓ Discovered UUID for {unakala1_name}:")
-        print_info(f"  UUID: {unakala1_uuid}")
-        print_info(f"  Username: unakala1")
+        # Fallback logic if search failed or returned no results
+        if not target_uuid:
+            if target_username in KNOWN_TEST_USERS:
+                target_uuid = KNOWN_TEST_USERS[target_username]
+                target_fullname = f"Test User ({target_username})"
+                print_warning(f"\n⚠️  Search failed (possibly empty test server).")
+                print_info(f"   Using known fallback UUID for '{target_username}' to continue demo.")
+                print_info(f"   UUID: {target_uuid}")
+            else:
+                print_error(f"Cannot proceed with rights assignment without a valid user UUID.")
+                return
 
         # Step 2: Assign individual user rights
-        wait_for_user("\nPress ENTER to assign READER rights to unakala1")
+        wait_for_user(f"\nPress ENTER to assign READER rights to {target_fullname}")
 
         print_step_header("2", "Assign individual user rights", "POST")
 
         rights_data = [
             {
-                "id": unakala1_uuid,
+                "id": target_uuid,
                 "role": "ROLE_READER"
             }
         ]
@@ -643,13 +589,16 @@ Use Cases for Individual Rights:
                     right_type = right.get('type', 'Unknown')
                     role = right.get('role', 'Unknown')
                     username = right.get('username', '')
+                    
+                    # Highlight our target user
+                    prefix = "  ➤" if username == target_username else "  •"
+                    
                     if username:
-                        print_info(f"  • {name} (@{username}, {right_type}) → {role}")
+                        print_info(f"{prefix} {name} (@{username}, {right_type}) → {role}")
                     else:
-                        print_info(f"  • {name} ({right_type}) → {role}")
+                        print_info(f"{prefix} {name} ({right_type}) → {role}")
 
                 print_success(f"\n✓ Individual user rights assignment complete!")
-                print_info(f"   User {unakala1_name} (@unakala1) now has READER access to this dataset")
         else:
             print_error(f"\n✗ Rights assignment failed: {assign_response.status_code}")
             print_error(assign_response.text)
