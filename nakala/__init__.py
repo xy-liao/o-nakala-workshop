@@ -17,8 +17,8 @@ Usage:
     # For interactive demonstrations
     from nakala.demo_helpers import print_section_header, make_api_request
 
-Author: Syl
-License: CC0-1.0
+Author: LIAO Shueh-Ying
+License: MIT
 """
 
 __version__ = "1.0.0"

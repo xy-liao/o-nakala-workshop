@@ -8,6 +8,7 @@ Functions for interacting with the NAKALA API.
 import requests
 import json
 import logging
+import time
 from typing import Dict, Any, Optional
 from pathlib import Path
 
@@ -47,7 +48,6 @@ def upload_file(file_path: Path, api_key: str, api_url: str = API_URL) -> Option
 
             if response.status_code == 201:
                 file_info = response.json()
-                import time
                 file_info['embargoed'] = time.strftime("%Y-%m-%d")  # Current date
                 logger.info(f"✓ File uploaded: {file_path.name} (sha1: {file_info['sha1'][:8]}...)")
                 return file_info
