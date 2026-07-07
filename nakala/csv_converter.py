@@ -52,19 +52,16 @@ class CsvConverter:
         if not value or value.strip() == "":
             return []
 
-        # Check if multilingual format present
-        if '|' not in value and ':' not in value:
-            # Simple value, no language
-            return [{"value": value.strip(), "lang": None}]
-
         result = []
         lang_parts = value.split('|')
 
         for part in lang_parts:
             part = part.strip()
-            if ':' in part:
-                # Split only on first colon
-                lang, text = part.split(':', 1)
+            lang, sep, text = part.partition(':')
+            # Only treat the prefix as a language tag if it looks like one
+            # (ISO 639 code, optional subtag). Otherwise a colon inside the
+            # value ("NAKALA: A User Guide", a URL) would be mistaken for one.
+            if sep and re.match(r'^[a-zA-Z]{2,3}(-[a-zA-Z0-9]+)?$', lang.strip()):
                 result.append({
                     "lang": lang.strip(),
                     "value": text.strip()
